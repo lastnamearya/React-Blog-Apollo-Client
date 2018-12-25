@@ -1,12 +1,29 @@
 import React, { Component } from 'react';
 import { ApolloProvider } from 'react-apollo';
 import ApolloClient from 'apollo-boost';
+import gql from 'graphql-tag';
 import logo from './logo.svg';
 import './App.css';
 
 const client = new ApolloClient({
   uri: 'https://api-apeast.graphcms.com/v1/cjq3qnpg27ity01bn6r18efw1/master'
 });
+
+const testQuery = gql`
+  {
+    posts {
+      id
+      title
+      body
+    }
+  }
+`;
+
+client
+  .query({
+    query: testQuery
+  })
+  .then(res => console.log(res));
 
 class App extends Component {
   render() {
