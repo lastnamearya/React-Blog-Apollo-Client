@@ -1,52 +1,25 @@
 import React, { Component } from 'react';
-import { ApolloProvider, Query } from 'react-apollo';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { ApolloProvider } from 'react-apollo';
 import ApolloClient from 'apollo-boost';
-import gql from 'graphql-tag';
-import logo from './logo.svg';
+import Posts from './Posts/Posts';
+import Post from './Posts/Post';
 import './App.css';
 
 const client = new ApolloClient({
   uri: 'https://api-apeast.graphcms.com/v1/cjq3qnpg27ity01bn6r18efw1/master'
 });
 
-const POSTS_QUERY = gql`
-  {
-    posts {
-      id
-      title
-      body
-    }
-  }
-`;
-
 class App extends Component {
   render() {
     return (
       <ApolloProvider client={client}>
-        <div className="App">
-          {/* <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <p>
-              Edit <code>src/App.js</code> and save to reload.
-            </p>
-            <a
-              className="App-link"
-              href="https://reactjs.org"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learn React
-            </a>
-          </header> */}
-          <Query query={POSTS_QUERY}>
-            {({ data, loading, error }) => {
-              if (loading) return <p>Loading...</p>;
-
-              const { posts } = data;
-              return posts.map(post => <h1>{post.title}</h1>);
-            }}
-          </Query>
-        </div>
+        <Router>
+          <Switch>
+            <Route exact path="/" component={Posts} />
+            <Route path="/post/:id" component={Post} />
+          </Switch>
+        </Router>
       </ApolloProvider>
     );
   }
