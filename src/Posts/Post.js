@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
-const POST_QUERY = gql`
-  query Post($id: ID!) {
+export const POST_QUERY = gql`
+  query post($id: ID!) {
     post(where: { id: $id }) {
       title
       id
