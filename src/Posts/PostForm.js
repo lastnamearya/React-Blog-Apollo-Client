@@ -29,7 +29,7 @@ export default class PostForm extends Component {
               body
             }
           })
-            .then(this.resetFields)
+            .then(() => this.resetFields)
             .catch(error => console.log(error));
         }}
       >
