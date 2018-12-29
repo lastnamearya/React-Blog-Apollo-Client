@@ -23,7 +23,7 @@ export default class Post extends Component {
 
           const { post } = data;
 
-          return <h1>{post.title}</h1>;
+          return <h1>{post.body}</h1>;
         }}
       </Query>
     );
