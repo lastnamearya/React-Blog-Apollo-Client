@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import PostForm from './PostForm';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 
@@ -15,6 +14,10 @@ export default class NewPost extends Component {
     this.setState({ ...formData });
   };
 
+  resetFields = () => {
+    this.setState({ title: '', body: '' });
+  };
+
   render() {
     const { title, body } = this.state;
     return (
@@ -24,14 +27,10 @@ export default class NewPost extends Component {
           mutation={NEW_POST}
           refetchQueries={[
             {
-              query: REFETCH
+              query: REFETCH_POSTS
             }
           ]}
           awaitRefetchQueries={true}
-          // variables={{
-          //   title,
-          //   body
-          // }}
         >
           {(createPost, { loading, error }) => (
             <form
@@ -42,7 +41,7 @@ export default class NewPost extends Component {
                     title,
                     body
                   }
-                });
+                }).then(this.resetFields);
               }}
             >
               <input
@@ -81,7 +80,7 @@ const NEW_POST = gql`
   }
 `;
 
-const REFETCH = gql`
+const REFETCH_POSTS = gql`
   query allPosts {
     posts {
       id
