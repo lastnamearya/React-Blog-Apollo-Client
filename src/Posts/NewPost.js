@@ -1,34 +1,15 @@
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
+import PostForm from './PostForm';
 
 export default class NewPost extends Component {
-  state = {
-    title: '',
-    body: ''
-  };
-
-  handleInput = e => {
-    const formData = {};
-    formData[e.target.name] = e.target.value;
-    this.setState({ ...formData });
-  };
-
-  resetFields = () => {
-    this.setState({ title: '', body: '' });
-  };
-
   render() {
-    const { title, body } = this.state;
     return (
       <div>
         <h1>Post Form</h1>
         <Mutation
           mutation={NEW_POST}
-          variables={{
-            title,
-            body
-          }}
           refetchQueries={[
             {
               query: REFETCH_POSTS
@@ -36,36 +17,13 @@ export default class NewPost extends Component {
           ]}
           awaitRefetchQueries={true}
         >
-          {(createPost, { loading, error }) => (
-            <form
-              onSubmit={evt => {
-                evt.preventDefault();
-                createPost()
-                  .then(this.resetFields)
-                  .catch(error => console.log(error));
-              }}
-            >
-              <input
-                name="title"
-                type="text"
-                onChange={this.handleInput}
-                value={title}
-                placeholder="title"
-              />
-              <textarea
-                name="body"
-                type="text"
-                onChange={this.handleInput}
-                value={body}
-                placeholder="body"
-              />
-              <button type="submit">Submit</button>
-              {loading && <p>Loading...</p>}
-              {error && <p>Something went wrong.</p>}
-            </form>
-          )}
+          {(createPost, { loading, error }) => {
+            if (loading) return <p>Loading...</p>;
+            if (error) return <p>Something went wrong.</p>;
+
+            return <PostForm onSubmit={createPost} />;
+          }}
         </Mutation>
-        {/* <PostForm /> */}
       </div>
     );
   }
