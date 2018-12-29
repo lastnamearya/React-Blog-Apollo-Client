@@ -1,0 +1,40 @@
+import React, { Component } from 'react';
+import { Mutation } from 'react-apollo';
+import gql from 'graphql-tag';
+import REFETCH_POSTS from './NewPost';
+import PostForm from './PostForm';
+
+export default class UpdatePost extends Component {
+  render() {
+    return (
+      <Mutation
+        mutation={UPDATE_POST}
+        refetchQueries={[
+          {
+            query: REFETCH_POSTS
+          }
+        ]}
+        awaitRefetchQueries={true}
+      >
+        {(updatePost, { loading, error }) => {
+          if (loading) return <p>Loading...</p>;
+          if (error) return <p>Something went wrong.</p>;
+
+          return <PostForm onSubmit={updatePost} id={this.props.id} />;
+        }}
+      </Mutation>
+    );
+  }
+}
+
+const UPDATE_POST = gql`
+  mutation updatePost($id: ID!, $title: String!, $body: String!) {
+    updatePost(
+      where: { id: $id }
+      data: { status: PUBLISHED, title: $title, body: $body }
+    ) {
+      title
+      body
+    }
+  }
+`;

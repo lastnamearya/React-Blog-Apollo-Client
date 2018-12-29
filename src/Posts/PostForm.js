@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 export default class PostForm extends Component {
+  static propTypes = {
+    onSubmit: PropTypes.func.isRequired
+  };
+
   state = {
     title: '',
     body: ''
@@ -19,16 +24,28 @@ export default class PostForm extends Component {
   render() {
     const { title, body } = this.state;
     const { onSubmit } = this.props;
+    const { id } = this.props;
+    console.log(id);
     return (
       <form
         onSubmit={evt => {
           evt.preventDefault();
-          onSubmit({
-            variables: {
-              title,
-              body
-            }
-          })
+          onSubmit(
+            id
+              ? {
+                  variables: {
+                    id,
+                    title,
+                    body
+                  }
+                }
+              : {
+                  variables: {
+                    title,
+                    body
+                  }
+                }
+          )
             .then(() => this.resetFields)
             .catch(error => console.log(error));
         }}
