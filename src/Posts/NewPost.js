@@ -25,6 +25,10 @@ export default class NewPost extends Component {
         <h1>Post Form</h1>
         <Mutation
           mutation={NEW_POST}
+          variables={{
+            title,
+            body
+          }}
           refetchQueries={[
             {
               query: REFETCH_POSTS
@@ -36,12 +40,9 @@ export default class NewPost extends Component {
             <form
               onSubmit={evt => {
                 evt.preventDefault();
-                createPost({
-                  variables: {
-                    title,
-                    body
-                  }
-                }).then(this.resetFields);
+                createPost()
+                  .then(this.resetFields)
+                  .catch(error => console.log(error));
               }}
             >
               <input
