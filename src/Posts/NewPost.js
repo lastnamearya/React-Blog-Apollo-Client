@@ -39,7 +39,7 @@ const NEW_POST = gql`
   }
 `;
 
-export const REFETCH_POSTS = gql`
+const REFETCH_POSTS = gql`
   query allPosts {
     posts {
       id

@@ -31,7 +31,7 @@ export default class Post extends Component {
               </section>
               <section>
                 <h1>Edit Post</h1>
-                <UpdatePost id={post.id} />
+                <UpdatePost post={post} />
               </section>
             </div>
           );

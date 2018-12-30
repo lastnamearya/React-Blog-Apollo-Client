@@ -3,12 +3,18 @@ import PropTypes from 'prop-types';
 
 export default class PostForm extends Component {
   static propTypes = {
-    onSubmit: PropTypes.func.isRequired
+    onSubmit: PropTypes.func.isRequired,
+    post: PropTypes.object
+  };
+
+  static defaultProps = {
+    post: {}
   };
 
   state = {
-    title: '',
-    body: ''
+    id: this.props.post.id || '',
+    title: this.props.post.title || '',
+    body: this.props.post.body || ''
   };
 
   handleInput = e => {
@@ -18,34 +24,23 @@ export default class PostForm extends Component {
   };
 
   resetFields = () => {
-    this.setState({ title: '', body: '' });
+    this.setState({ title: '', body: '', id: '' });
   };
 
   render() {
-    const { title, body } = this.state;
+    const { title, body, id } = this.state;
     const { onSubmit } = this.props;
-    const { id } = this.props;
-    console.log(id);
     return (
       <form
         onSubmit={evt => {
           evt.preventDefault();
-          onSubmit(
-            id
-              ? {
-                  variables: {
-                    id,
-                    title,
-                    body
-                  }
-                }
-              : {
-                  variables: {
-                    title,
-                    body
-                  }
-                }
-          )
+          onSubmit({
+            variables: {
+              title,
+              body,
+              id
+            }
+          })
             .then(() => this.resetFields)
             .catch(error => console.log(error));
         }}
