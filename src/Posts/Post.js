@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import UpdatePost from './UpdatePost';
+import EditMode from './EditMode';
 
 export const POST_QUERY = gql`
   query post($id: ID!) {
@@ -27,6 +28,7 @@ export default class Post extends Component {
 
           return (
             <div>
+              <EditMode isEditMode={isEditMode} />
               {isEditMode ? (
                 <section>
                   <h1>Edit Post</h1>
