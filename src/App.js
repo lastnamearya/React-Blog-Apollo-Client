@@ -7,8 +7,15 @@ import Post from './Posts/Post';
 import NewPost from './Posts/NewPost';
 import './App.css';
 
+const defaultState = {
+  isEditMode: false
+};
+
 const client = new ApolloClient({
-  uri: 'https://api-apeast.graphcms.com/v1/cjq3qnpg27ity01bn6r18efw1/master'
+  uri: 'https://api-apeast.graphcms.com/v1/cjq3qnpg27ity01bn6r18efw1/master',
+  clientState: {
+    defaults: defaultState
+  }
 });
 
 class App extends Component {

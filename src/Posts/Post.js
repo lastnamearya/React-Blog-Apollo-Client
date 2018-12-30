@@ -10,6 +10,7 @@ export const POST_QUERY = gql`
       id
       body
     }
+    isEditMode @client
   }
 `;
 
@@ -22,17 +23,20 @@ export default class Post extends Component {
           if (loading) return <p>Loading...</p>;
           if (error) return <p>Something went wrong.</p>;
 
-          const { post } = data;
+          const { post, isEditMode } = data;
 
           return (
             <div>
-              <section>
-                <h1>{post.title}</h1>
-              </section>
-              <section>
-                <h1>Edit Post</h1>
-                <UpdatePost post={post} />
-              </section>
+              {isEditMode ? (
+                <section>
+                  <h1>Edit Post</h1>
+                  <UpdatePost post={post} />
+                </section>
+              ) : (
+                <section>
+                  <h1>{post.title}</h1>
+                </section>
+              )}
             </div>
           );
         }}
