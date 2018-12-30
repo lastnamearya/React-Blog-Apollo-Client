@@ -7,7 +7,15 @@ export default class UpdatePost extends Component {
   render() {
     const { post } = this.props;
     return (
-      <Mutation mutation={UPDATE_POST}>
+      <Mutation
+        mutation={UPDATE_POST}
+        refetchQueries={[
+          {
+            query: REFETCH_POSTS
+          }
+        ]}
+        awaitRefetchQueries={true}
+      >
         {(updatePost, { loading, error }) => {
           if (loading) return <p>Loading...</p>;
           if (error) return <p>Something went wrong.</p>;
@@ -25,6 +33,16 @@ const UPDATE_POST = gql`
       where: { id: $id }
       data: { status: PUBLISHED, title: $title, body: $body }
     ) {
+      title
+      body
+    }
+  }
+`;
+
+const REFETCH_POSTS = gql`
+  query allPosts {
+    posts {
+      id
       title
       body
     }
