@@ -14,7 +14,9 @@ const defaultState = {
 const client = new ApolloClient({
   uri: 'https://api-apeast.graphcms.com/v1/cjq3qnpg27ity01bn6r18efw1/master',
   clientState: {
-    defaults: defaultState
+    defaults: defaultState,
+    // It's a bug in Apollo as of now, resolvers isn't optional.
+    resolvers: {}
   }
 });
 
