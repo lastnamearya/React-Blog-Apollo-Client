@@ -4,11 +4,13 @@ import PropTypes from 'prop-types';
 export default class PostForm extends Component {
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
+    onSuccess: PropTypes.func,
     post: PropTypes.object
   };
 
   static defaultProps = {
-    post: {}
+    post: {},
+    onSuccess: () => null
   };
 
   state = {
