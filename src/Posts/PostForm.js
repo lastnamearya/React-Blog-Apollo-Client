@@ -29,7 +29,7 @@ export default class PostForm extends Component {
 
   render() {
     const { title, body, id } = this.state;
-    const { onSubmit } = this.props;
+    const { onSubmit, onSuccess } = this.props;
     return (
       <form
         onSubmit={evt => {
@@ -42,6 +42,7 @@ export default class PostForm extends Component {
             }
           })
             .then(() => this.resetFields)
+            .then(onSuccess())
             .catch(error => console.log(error));
         }}
       >

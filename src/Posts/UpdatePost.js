@@ -16,11 +16,18 @@ export default class UpdatePost extends Component {
         ]}
         awaitRefetchQueries={true}
       >
-        {(updatePost, { loading, error }) => {
+        {(updatePost, result, loading, error) => {
           if (loading) return <p>Loading...</p>;
           if (error) return <p>Something went wrong.</p>;
 
-          return <PostForm post={post} onSubmit={updatePost} />;
+          const onSuccess = () =>
+            result.client.writeData({ data: { isEditMode: false } });
+
+          console.log(result);
+
+          return (
+            <PostForm post={post} onSuccess={onSuccess} onSubmit={updatePost} />
+          );
         }}
       </Mutation>
     );
