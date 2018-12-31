@@ -4,18 +4,8 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
 const POSTS_QUERY = gql`
-  query allPosts {
-    posts {
-      id
-      title
-      body
-    }
-  }
-`;
-
-const POSTS_QUERY_FIRST_FIVE = gql`
-  query allPosts($first: Int!, $skip: Int!) {
-    posts(orderBy: createdAt_DESC, first: $first, skip: $skip) {
+  query allPosts($skip: Int) {
+    posts(orderBy: createdAt_DESC, first: 5, skip: $skip) {
       id
       title
       body
@@ -24,16 +14,6 @@ const POSTS_QUERY_FIRST_FIVE = gql`
 `;
 
 export default class Posts extends Component {
-  state = {
-    first: 3
-  };
-
-  handleLoading = () => {
-    this.setState(prevState => ({
-      first: prevState.first + 3
-    }));
-  };
-
   render() {
     return (
       <div>
@@ -41,26 +21,43 @@ export default class Posts extends Component {
           New Post
         </Link>
         <ol className="posts-listing">
-          <Query
-            query={POSTS_QUERY_FIRST_FIVE}
-            variables={{ first: this.state.first, skip: 0 }}
-          >
-            {({ data, loading, error }) => {
+          <Query query={POSTS_QUERY}>
+            {({ data, loading, fetchMore, error }) => {
               if (loading) return <p>Loading...</p>;
               if (error) return <p>Something went wrong</p>;
 
               const { posts } = data;
-              return posts.map(post => (
-                <li key={post.id}>
-                  <Link to={`/post/${post.id}`}>{post.title}</Link>
-                </li>
-              ));
+
+              return (
+                <React.Fragment>
+                  {posts.map(post => (
+                    <li key={post.id}>
+                      <Link to={`/post/${post.id}`}>{post.title}</Link>
+                    </li>
+                  ))}
+                  <button
+                    className="button"
+                    onClick={() =>
+                      fetchMore({
+                        variables: {
+                          skip: posts.length
+                        },
+                        updateQuery: (prev, { fetchMoreResult }) => {
+                          if (!fetchMoreResult) return prev;
+                          return Object.assign({}, prev, {
+                            posts: [...prev.posts, ...fetchMoreResult.posts]
+                          });
+                        }
+                      })
+                    }
+                  >
+                    Show More
+                  </button>
+                </React.Fragment>
+              );
             }}
           </Query>
         </ol>
-        <button onClick={this.handleLoading} className="button">
-          Load More
-        </button>
       </div>
     );
   }
