@@ -28,7 +28,7 @@ main {
 }
 
 .posts-listing {
-  list-style: none;
+  /* list-style: none; */
   padding: 0;
   margin: 2rem auto;
 }

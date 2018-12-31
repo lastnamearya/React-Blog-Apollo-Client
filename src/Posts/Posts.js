@@ -13,6 +13,16 @@ const POSTS_QUERY = gql`
   }
 `;
 
+const POSTS_QUERY_FIRST_FIVE = gql`
+  query allPosts {
+    posts(orderBy: createdAt_DESC, first: 5) {
+      id
+      title
+      body
+    }
+  }
+`;
+
 export default class Posts extends Component {
   render() {
     return (
@@ -20,8 +30,8 @@ export default class Posts extends Component {
         <Link className="button" to={'/post/new'}>
           New Post
         </Link>
-        <ul className="posts-listing">
-          <Query query={POSTS_QUERY}>
+        <ol className="posts-listing">
+          <Query query={POSTS_QUERY_FIRST_FIVE}>
             {({ data, loading, error }) => {
               if (loading) return <p>Loading...</p>;
               if (error) return <p>Something went wrong</p>;
@@ -34,7 +44,7 @@ export default class Posts extends Component {
               ));
             }}
           </Query>
-        </ul>
+        </ol>
       </div>
     );
   }
