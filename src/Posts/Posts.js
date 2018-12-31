@@ -14,8 +14,8 @@ const POSTS_QUERY = gql`
 `;
 
 const POSTS_QUERY_FIRST_FIVE = gql`
-  query allPosts {
-    posts(orderBy: createdAt_DESC, first: 5) {
+  query allPosts($first: Int!, $skip: Int!) {
+    posts(orderBy: createdAt_DESC, first: $first, skip: $skip) {
       id
       title
       body
@@ -24,6 +24,16 @@ const POSTS_QUERY_FIRST_FIVE = gql`
 `;
 
 export default class Posts extends Component {
+  state = {
+    first: 3
+  };
+
+  handleLoading = () => {
+    this.setState(prevState => ({
+      first: prevState.first + 3
+    }));
+  };
+
   render() {
     return (
       <div>
@@ -31,7 +41,10 @@ export default class Posts extends Component {
           New Post
         </Link>
         <ol className="posts-listing">
-          <Query query={POSTS_QUERY_FIRST_FIVE}>
+          <Query
+            query={POSTS_QUERY_FIRST_FIVE}
+            variables={{ first: this.state.first, skip: 0 }}
+          >
             {({ data, loading, error }) => {
               if (loading) return <p>Loading...</p>;
               if (error) return <p>Something went wrong</p>;
@@ -45,6 +58,9 @@ export default class Posts extends Component {
             }}
           </Query>
         </ol>
+        <button onClick={this.handleLoading} className="button">
+          Load More
+        </button>
       </div>
     );
   }
